@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petualangan Membaca Anak</title>
+  <!-- Google Font: Fredoka (Ramah Anak) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #f0fdf4;
+      --card-bg: #ffffff;
+      --primary: #4ade80;
+      --primary-dark: #22c55e;
+      --accent: #ff70a6;
+      --yellow: #ffd166;
+      --blue: #4cc9f0;
+      --text: #2d3748;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Fredoka', cursive, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 15px;
+      background-color: #e0f2fe;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 650px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border: 4px solid #bae6fd;
+      text-align: center;
+    }
+
+    header {
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      color: #0284c7;
+      margin: 5px 0;
+      font-size: 1.8rem;
+    }
+
+    /* Menu Level */
+    .level-menu {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .btn-level {
+      background: var(--yellow);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #f59e0b;
+      transition: all 0.1s;
+    }
+
+    .btn-level:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #f59e0b;
+    }
+
+    .btn-level.active {
+      background: #38bdf8;
+      color: white;
+      box-shadow: 0 4px 0 #0284c7;
+    }
+
+    /* Area Game / Kartu */
+    .game-card {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 20px;
+      border: 2px dashed #cbd5e1;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Konten Level 1 - Abjad */
+    .abjad-display {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #ec4899;
+    }
+
+    .image-box {
+      font-size: 5rem;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .image-box:hover {
+      transform: scale(1.1);
+    }
+
+    .word-label {
+      font-size: 1.5rem;
+      color: #475569;
+    }
+
+    /* Option Grid untuk Kuis */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .btn-option {
+      background: #ffffff;
+      border: 3px solid #e2e8f0;
+      padding: 12px;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #cbd5e1;
+    }
+
+    .btn-option:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #cbd5e1;
+    }
+
+    /* Suku katainteraktif (Level 3 & 4) */
+    .syllable-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .syllable-btn {
+      background: #fef08a;
+      border: 3px solid #facc15;
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #854d0e;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #ca8a04;
+    }
+
+    /* Kalimat (Level 5) */
+    .sentence-box {
+      font-size: 1.6rem;
+      line-height: 1.6;
+      color: #1e293b;
+      margin: 15px 0;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .clickable-word {
+      display: inline-block;
+      padding: 2px 6px;
+      margin: 2px;
+      border-radius: 8px;
+      background: #e0f2fe;
+      cursor: pointer;
+      color: #0369a1;
+    }
+
+    /* Tombol Navigasi Bawah */
+    .action-btn {
+      margin-top: 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 var(--primary-dark);
+    }
+
+    .action-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 var(--primary-dark);
+    }
+
+    .speaker-icon {
+      font-size: 1.2rem;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+
+    /* Modal Bintang / Result */
+    .modal {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .stars {
+      font-size: 3rem;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <header>
+    <h1>Ayo Belajar Membaca! 📖</h1>
+    <div class="level-menu">
+      <button class="btn-level active" onclick="loadLevel(1)">Lvl 1: Abjad</button>
+      <button class="btn-level" onclick="loadLevel(2)">Lvl 2: Fonik</button>
+      <button class="btn-level" onclick="loadLevel(3)">Lvl 3: VKVK</button>
+      <button class="btn-level" onclick="loadLevel(4)">Lvl 4: Akhiran</button>
+      <button class="btn-level" onclick="loadLevel(5)">Lvl 5: Kalimat</button>
+    </div>
+  </header>
+
+  <!-- Area Permainan Utama -->
+  <div class="game-card" id="gameCard">
+    <!-- Konten dinamis dirender via JavaScript -->
+  </div>
+
+  <!-- Pop-up Kemenangan -->
+  <div class="modal" id="resultModal">
+    <div class="stars">⭐⭐⭐</div>
+    <h2>Hore! Kamu Hebat! 🎉</h2>
+    <p id="modalText">Kamu menyelesaikan level ini!</p>
+    <button class="action-btn" onclick="nextQuestion()">Lanjut ➔</button>
+  </div>
+</div>
+
+<script>
+  // --- Efek Suara (Web Audio API) ---
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+      gain.gain.fadeOut(0.3);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'wrong') {
+      osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
+      gain.gain.fadeOut(0.2);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    } else if (type === 'pop') {
+      osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+      gain.gain.fadeOut(0.05);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+  }
+
+  // --- Fitur Text-to-Speech (Suara Bahasa Indonesia) ---
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.8; // Kecepatan suara disesuaikan untuk anak
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  // --- Data Game Per Level ---
+  const gameData = {
+    level1: [
+      { big: 'A', small: 'a', word: 'Apel', img: '🍎' },
+      { big: 'B', small: 'b', word: 'Bebek', img: '🦆' },
+      { big: 'C', small: 'c', word: 'Cacing', img: '🪱' },
+      { big: 'K', small: 'k', word: 'Kucing', img: '🐱' },
+      { big: 'M', small: 'm', word: 'Mobil', img: '🚗' }
+    ],
+    level2: [
+      { letter: 'B b', soundText: 'buh', example: 'B - A = BA', img: '🎈' },
+      { letter: 'C c', soundText: 'cuh', example: 'C - A = CA', img: '🍌' },
+      { letter: 'D d', soundText: 'duh', example: 'D - U = DU', img: '🎲' },
+      { letter: 'M m', soundText: 'em', example: 'M - A = MA', img: '🌙' },
+      { letter: 'S s', soundText: 'esh', example: 'S - U = SU', img: '🥛' }
+    ],
+    level3: [
+      { word: 'buku', parts: ['bu', 'ku'], img: '📚' },
+      { word: 'bola', parts: ['bo', 'la'], img: '⚽' },
+      { word: 'meja', parts: ['me', 'ja'], img: '🪑' },
+      { word: 'kuda', parts: ['ku', 'da'], img: '🐴' },
+      { word: 'roti', parts: ['ro', 'ti'], img: '🍞' }
+    ],
+    level4: [
+      { word: 'gajah', parts: ['ga', 'jah'], ending: 'h', img: '🐘' },
+      { word: 'anak', parts: ['a', 'nak'], ending: 'k', img: '🧒' },
+      { word: 'sisir', parts: ['si', 'sir'], ending: 'r', img: '🪮' },
+      { word: 'minum', parts: ['mi', 'num'], ending: 'm', img: '🥤' },
+      { word: 'makan', parts: ['ma', 'kan'], ending: 'n', img: '🍽️' },
+      { word: 'pisang', parts: ['pi', 'sang'], ending: 'ng', img: '🍌' }
+    ],
+    level5: [
+      { sentence: "Budi suka minum susu.", words: ["Budi", "suka", "minum", "susu."], img: "🥛" },
+      { sentence: "Saya punya kucing lucu.", words: ["Saya", "punya", "kucing", "lucu."], img: "🐱" },
+      { sentence: "Ibu membeli buah pisang.", words: ["Ibu", "membeli", "buah", "pisang."], img: "🍌" }
+    ]
+  };
+
+  let currentLevel = 1;
+  let currentIndex = 0;
+
+  function loadLevel(lvl) {
+    playSound('pop');
+    currentLevel = lvl;
+    currentIndex = 0;
+    
+    // Update active tab UI
+    const btns = document.querySelectorAll('.btn-level');
+    btns.forEach((btn, idx) => {
+      btn.classList.toggle('active', idx + 1 === lvl);
+    });
+
+    document.getElementById('resultModal').style.display = 'none';
+    renderContent();
+  }
+
+  function renderContent() {
+    const card = document.getElementById('gameCard');
+    card.innerHTML = '';
+
+    if (currentLevel === 1) {
+      // Level 1: Abjad & Gambar
+      const item = gameData.level1[currentIndex];
+      card.innerHTML = `
+        <div class="abjad-display">${item.big} ${item.small}</div>
+        <div class="image-box" onclick="speak('${item.word}')">${item.img}</div>
+        <div class="word-label">${item.word} <span class="speaker-icon">🔊</span></div>
+        <p>Kuis: Huruf awal dari kata di atas adalah?</p>
+        <div class="options-grid" id="options"></div>
+      `;
+      speak(`${item.big}... ${item.word}`);
+      generateOptions(item.big, gameData.level1.map(i => i.big));
+
+    } else if (currentLevel === 2) {
+      // Level 2: Fonik
+      const item = gameData.level2[currentIndex];
+      card.innerHTML = `
+        <div class="abjad-display" style="color: #0284c7;">${item.letter}</div>
+        <div class="image-box">${item.img}</div>
+        <p style="font-size: 1.2rem;">Bunyi huruf: <strong>/${item.soundText}/</strong></p>
+        <button class="action-btn" onclick="speak('${item.soundText}')">Dengar Bunyi 🔊</button>
+        <p style="margin-top:20px;">Contoh Gabungan: <strong>${item.example}</strong></p>
+        <button class="action-btn" style="background:#f59e0b;" onclick="showWinModal()">Lanjut ➔</button>
+      `;
+      speak(item.letter);
+
+    } else if (currentLevel === 3 || currentLevel === 4) {
+      // Level 3 & 4: Membaca Kata (VKVK / Akhiran Konsonan)
+      const list = currentLevel === 3 ? gameData.level3 : gameData.level4;
+      const item = list[currentIndex];
+      
+      let syllablesHtml = item.parts.map(p => 
+        `<button class="syllable-btn" onclick="speak('${p}')">${p}</button>`
+      ).join('');
+
+      card.innerHTML = `
+        <div class="image-box" onclick="speak('${item.word}')">${item.img}</div>
+        <p>Klik tiap suku kata untuk mengeja:</p>
+        <div class="syllable-container">${syllablesHtml}</div>
+        <button class="action-btn" onclick="speak('${item.word}')">Baca Utuh: ${item.word} 🔊</button>
+        <br><br>
+        <button class="action-btn" style="background:#f59e0b;" onclick="showWinModal()">Hebat, Lanjut! ➔</button>
+      `;
+      speak(item.word);
+
+    } else if (currentLevel === 5) {
+      // Level 5: Kalimat Pendek
+      const item = gameData.level5[currentIndex];
+      let wordsHtml = item.words.map(w => 
+        `<span class="clickable-word" onclick="speak('${w}')">${w}</span>`
+      ).join(' ');
+
+      card.innerHTML = `
+        <div class="image-box">${item.img}</div>
+        <p>Klik kata untuk mendengarkan:</p>
+        <div class="sentence-box">${wordsHtml}</div>
+        <button class="action-btn" onclick="speak('${item.sentence}')">Dengar Seluruh Kalimat 🔊</button>
+        <br><br>
+        <button class="action-btn" style="background:#f59e0b;" onclick="showWinModal()">Selesai! ➔</button>
+      `;
+      speak(item.sentence);
+    }
+  }
+
+  // Generate Opsi Pilihan Ganda untuk Kuis Lvl 1
+  function generateOptions(correctAnswer, allOptions) {
+    const optionsContainer = document.getElementById('options');
+    let choices = [correctAnswer];
+    
+    while(choices.length < 4) {
+      let rand = allOptions[Math.floor(Math.random() * allOptions.length)];
+      if(!choices.includes(rand)) choices.push(rand);
+    }
+    choices.sort(() => Math.random() - 0.5); // Acak opsi
+
+    choices.forEach(choice => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-option';
+      btn.innerText = choice;
+      btn.onclick = () => checkAnswer(choice, correctAnswer);
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(selected, correct) {
+    if (selected === correct) {
+      playSound('correct');
+      showWinModal();
+    } else {
+      playSound('wrong');
+      alert('Ayo coba lagi, sayang! 🙂');
+    }
+  }
+
+  function showWinModal() {
+    playSound('correct');
+    const modal = document.getElementById('resultModal');
+    modal.style.display = 'flex';
+  }
+
+  function nextQuestion() {
+    playSound('pop');
+    document.getElementById('resultModal').style.display = 'none';
+    
+    let listLength = gameData[`level${currentLevel}`].length;
+    currentIndex = (currentIndex + 1) % listLength;
+    renderContent();
+  }
+
+  // Jalankan level 1 pertama kali
+  loadLevel(1);
+</script>
+
+</body>
+</html>
