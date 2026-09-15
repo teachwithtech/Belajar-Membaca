@@ -354,6 +354,17 @@
 
 <script>
   let childName = "Teman Kecil";
+  let audioCtx = null;
+
+  // Initializer Audio Context agar aman di browser modern
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
 
   // --- Memulai Game dari Landing Page ---
   function startGame() {
@@ -361,55 +372,64 @@
     if (input !== "") {
       childName = input;
     }
-    
-    playSound('correct');
-    speak(`Halo ${childName}, selamat datang! Ayo belajar membaca bersama!`);
 
+    // Pindah layar dulu agar dipastikan game langsung terbuka
     document.getElementById('landingScreen').style.display = 'none';
     document.getElementById('gameScreen').style.display = 'block';
     document.getElementById('welcomeTag').innerText = `Halo, ${childName}! 👋`;
+
+    // Inisialisasi audio dan jalankan game
+    initAudio();
+    playSound('correct');
+    speak(`Halo ${childName}, ayo belajar membaca!`);
 
     loadLevel(1);
   }
 
   // --- Efek Suara (Web Audio API) ---
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
   function playSound(type) {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    try {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
 
-    if (type === 'correct') {
-      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
-      gain.gain.fadeOut(0.3);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.3);
-    } else if (type === 'wrong') {
-      osc.frequency.setValueAtTime(200, audioCtx.currentTime);
-      osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
-      gain.gain.fadeOut(0.2);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.2);
-    } else if (type === 'pop') {
-      osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-      gain.gain.fadeOut(0.05);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        gain.gain.fadeOut(0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
+        gain.gain.fadeOut(0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+      } else if (type === 'pop') {
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        gain.gain.fadeOut(0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      }
+    } catch(e) {
+      console.log("Audio error ignored:", e);
     }
   }
 
   // --- Fitur Text-to-Speech (Suara Bahasa Indonesia) ---
   function speak(text) {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'id-ID';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
+      }
+    } catch(e) {
+      console.log("Speech synthesis error ignored:", e);
     }
   }
 
