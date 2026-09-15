@@ -36,6 +36,7 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      justify-content: center;
     }
 
     #app {
@@ -47,6 +48,66 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       border: 4px solid #bae6fd;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* === LANDING PAGE / WELCOME SCREEN === */
+    .landing-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 10px;
+    }
+
+    .landing-icon {
+      font-size: 4.5rem;
+      margin-bottom: 10px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .landing-title {
+      color: #0284c7;
+      font-size: 2.2rem;
+      margin: 0 0 10px 0;
+    }
+
+    .landing-subtitle {
+      font-size: 1.1rem;
+      color: #64748b;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 20px;
+    }
+
+    .input-name {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.3rem;
+      border: 3px solid #cbd5e1;
+      border-radius: 16px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-name:focus {
+      border-color: #38bdf8;
+    }
+
+    /* === MAIN GAME SCREEN === */
+    .game-screen {
+      display: none;
     }
 
     header {
@@ -57,6 +118,13 @@
       color: #0284c7;
       margin: 5px 0;
       font-size: 1.8rem;
+    }
+
+    .welcome-tag {
+      font-size: 1.1rem;
+      color: #ff70a6;
+      font-weight: 600;
+      margin-bottom: 10px;
     }
 
     /* Menu Level */
@@ -153,7 +221,7 @@
       box-shadow: 0 2px 0 #cbd5e1;
     }
 
-    /* Suku katainteraktif (Level 3 & 4) */
+    /* Suku kata interaktif (Level 3 & 4) */
     .syllable-container {
       display: flex;
       gap: 10px;
@@ -201,7 +269,7 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 12px 24px;
+      padding: 12px 28px;
       font-size: 1.2rem;
       font-weight: bold;
       border-radius: 50px;
@@ -234,7 +302,7 @@
     }
 
     .stars {
-      font-size: 3rem;
+      font-size: 3.5rem;
       margin: 10px 0;
     }
   </style>
@@ -242,32 +310,68 @@
 <body>
 
 <div id="app">
-  <header>
-    <h1>Ayo Belajar Membaca! 📖</h1>
-    <div class="level-menu">
-      <button class="btn-level active" onclick="loadLevel(1)">Lvl 1: Abjad</button>
-      <button class="btn-level" onclick="loadLevel(2)">Lvl 2: Fonik</button>
-      <button class="btn-level" onclick="loadLevel(3)">Lvl 3: VKVK</button>
-      <button class="btn-level" onclick="loadLevel(4)">Lvl 4: Akhiran</button>
-      <button class="btn-level" onclick="loadLevel(5)">Lvl 5: Kalimat</button>
+  <!-- LANDING PAGE -->
+  <div class="landing-screen" id="landingScreen">
+    <div class="landing-icon">📚✨</div>
+    <h1 class="landing-title">Petualangan Membaca</h1>
+    <p class="landing-subtitle">Game Edukasi Seru untuk Si Kecil!</p>
+    
+    <div class="input-group">
+      <input type="text" id="childNameInput" class="input-name" placeholder="Ketik nama anak..." maxlength="15">
     </div>
-  </header>
 
-  <!-- Area Permainan Utama -->
-  <div class="game-card" id="gameCard">
-    <!-- Konten dinamis dirender via JavaScript -->
+    <button class="action-btn" onclick="startGame()">Mulai Bermain! 🚀</button>
   </div>
 
-  <!-- Pop-up Kemenangan -->
-  <div class="modal" id="resultModal">
-    <div class="stars">⭐⭐⭐</div>
-    <h2>Hore! Kamu Hebat! 🎉</h2>
-    <p id="modalText">Kamu menyelesaikan level ini!</p>
-    <button class="action-btn" onclick="nextQuestion()">Lanjut ➔</button>
+  <!-- HALAMAN UTAMA GAME -->
+  <div class="game-screen" id="gameScreen">
+    <header>
+      <div class="welcome-tag" id="welcomeTag">Halo, Teman Kecil! 👋</div>
+      <h1>Ayo Belajar Membaca! 📖</h1>
+      <div class="level-menu">
+        <button class="btn-level active" onclick="loadLevel(1)">Lvl 1: Abjad</button>
+        <button class="btn-level" onclick="loadLevel(2)">Lvl 2: Fonik</button>
+        <button class="btn-level" onclick="loadLevel(3)">Lvl 3: VKVK</button>
+        <button class="btn-level" onclick="loadLevel(4)">Lvl 4: Akhiran</button>
+        <button class="btn-level" onclick="loadLevel(5)">Lvl 5: Kalimat</button>
+      </div>
+    </header>
+
+    <!-- Area Permainan Utama -->
+    <div class="game-card" id="gameCard">
+      <!-- Konten dinamis dirender via JavaScript -->
+    </div>
+
+    <!-- Pop-up Kemenangan -->
+    <div class="modal" id="resultModal">
+      <div class="stars">⭐⭐⭐</div>
+      <h2>Hore! Kamu Hebat! 🎉</h2>
+      <p id="modalText">Kamu menyelesaikan level ini!</p>
+      <button class="action-btn" onclick="nextQuestion()">Lanjut ➔</button>
+    </div>
   </div>
 </div>
 
 <script>
+  let childName = "Teman Kecil";
+
+  // --- Memulai Game dari Landing Page ---
+  function startGame() {
+    const input = document.getElementById('childNameInput').value.trim();
+    if (input !== "") {
+      childName = input;
+    }
+    
+    playSound('correct');
+    speak(`Halo ${childName}, selamat datang! Ayo belajar membaca bersama!`);
+
+    document.getElementById('landingScreen').style.display = 'none';
+    document.getElementById('gameScreen').style.display = 'block';
+    document.getElementById('welcomeTag').innerText = `Halo, ${childName}! 👋`;
+
+    loadLevel(1);
+  }
+
   // --- Efek Suara (Web Audio API) ---
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   
@@ -301,10 +405,10 @@
   // --- Fitur Text-to-Speech (Suara Bahasa Indonesia) ---
   function speak(text) {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'id-ID';
-      utterance.rate = 0.8; // Kecepatan suara disesuaikan untuk anak
+      utterance.rate = 0.8;
       window.speechSynthesis.speak(utterance);
     }
   }
@@ -396,7 +500,7 @@
       speak(item.letter);
 
     } else if (currentLevel === 3 || currentLevel === 4) {
-      // Level 3 & 4: Membaca Kata (VKVK / Akhiran Konsonan)
+      // Level 3 & 4: Membaca Kata
       const list = currentLevel === 3 ? gameData.level3 : gameData.level4;
       const item = list[currentIndex];
       
@@ -442,7 +546,7 @@
       let rand = allOptions[Math.floor(Math.random() * allOptions.length)];
       if(!choices.includes(rand)) choices.push(rand);
     }
-    choices.sort(() => Math.random() - 0.5); // Acak opsi
+    choices.sort(() => Math.random() - 0.5);
 
     choices.forEach(choice => {
       const btn = document.createElement('button');
@@ -459,12 +563,14 @@
       showWinModal();
     } else {
       playSound('wrong');
-      alert('Ayo coba lagi, sayang! 🙂');
+      speak(`Ayo coba lagi, ${childName}!`);
     }
   }
 
   function showWinModal() {
     playSound('correct');
+    document.getElementById('modalText').innerText = `Hebat sekali, ${childName}! Kamu pintar! 🌟`;
+    speak(`Hebat sekali ${childName}! Kamu pintar!`);
     const modal = document.getElementById('resultModal');
     modal.style.display = 'flex';
   }
@@ -477,9 +583,6 @@
     currentIndex = (currentIndex + 1) % listLength;
     renderContent();
   }
-
-  // Jalankan level 1 pertama kali
-  loadLevel(1);
 </script>
 
 </body>
