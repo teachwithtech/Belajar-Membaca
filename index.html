@@ -83,7 +83,7 @@
       border: 3px solid #38bdf8;
       border-radius: 20px;
       padding: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       outline: none;
       font-family: inherit;
       font-weight: bold;
@@ -250,6 +250,13 @@
       font-family: inherit;
     }
 
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
     .action-btn {
       font-size: 1.1rem;
       padding: 12px 28px;
@@ -262,11 +269,30 @@
       cursor: pointer;
       box-shadow: 0 5px 0 #22c55e;
       transition: all 0.1s;
+      width: 85%;
     }
 
     .action-btn:active {
       transform: translateY(4px);
       box-shadow: 0 1px 0 #22c55e;
+    }
+
+    .reset-btn {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      background: rgba(244, 63, 94, 0.85);
+      color: white;
+      border: 2px solid #fca5a5;
+      border-radius: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #e11d48;
+    }
+
+    .reset-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #e11d48;
     }
 
     #feedback {
@@ -311,7 +337,6 @@
       box-shadow: 0 4px 0 #e11d48;
     }
 
-    /* Style Khusus Level 6 (Susun Kata Acak) */
     .word-scramble-hint {
       font-size: 1.1rem;
       font-weight: 700;
@@ -332,7 +357,10 @@
       
       <input type="text" id="player-name-input" class="input-name-box" placeholder="Ketik Namamu..." autocomplete="off">
       <br>
-      <button id="start-btn" class="action-btn">Mulai Bermain 🚀</button>
+      <div class="btn-group">
+        <button id="start-btn" class="action-btn">Mulai Bermain 🚀</button>
+        <button id="reset-progress-btn" class="reset-btn" style="display: none;">🔄 Riset Progress</button>
+      </div>
     </div>
 
     <!-- 2. LEVEL SELECT PAGE -->
@@ -354,7 +382,7 @@
 
       <div id="level-badge" class="level-badge">Level 1</div>
 
-      <!-- Kunci Kode Warna (Sembunyi di Level 6) -->
+      <!-- Kunci Kode Warna -->
       <div id="key-section-container" class="key-section">
         <div class="key-title">KUNCI HURUF WARNA</div>
         <div id="color-key" class="key-board"></div>
@@ -368,8 +396,8 @@
           <span id="equals-sign" class="equals">=</span>
           <input type="text" id="answer-input" class="answer-box" placeholder="..." readonly>
         </div>
-        <div style="margin-top: 15px;">
-          <button id="check-btn" class="action-btn">Cek Jawaban ✨</button>
+        <div style="margin-top: 15px; display: flex; justify-content: center;">
+          <button id="check-btn" class="action-btn" style="width: auto;">Cek Jawaban ✨</button>
         </div>
       </div>
 
@@ -383,7 +411,6 @@
   </div>
 
   <script>
-    // System Web Audio API untuk Efek Suara
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
@@ -440,44 +467,18 @@
       }
     }
 
-    // Palette Warna Kontras Tinggi
     const distinctColors = [
       '#ef476f', '#118ab2', '#06d6a0', '#ffd166', '#f78c6b', 
       '#8338ec', '#3a86ff', '#80ed99', '#ff70a6', '#ff9770'
     ];
 
-    // Bank Data Level Tersebar
     const levels = [
-      {
-        id: 0,
-        name: "🌱 Level 1: Kata 2-3 Huruf",
-        words: ["ibu", "apa", "ada", "ani", "api", "uap"]
-      },
-      {
-        id: 1,
-        name: "🔤 Level 2: Kata 4 Huruf",
-        words: ["baca", "buku", "bola", "kaki", "mata", "sapu"]
-      },
-      {
-        id: 2,
-        name: "⭐ Level 3: Kata 5 Huruf",
-        words: ["makan", "minum", "gajah", "rumah", "pohon", "hujan"]
-      },
-      {
-        id: 3,
-        name: "🚀 Level 4: Kata 6 Huruf",
-        words: ["sepeda", "sekolah", "sepatu", "celana", "burung", "kucing"]
-      },
-      {
-        id: 4,
-        name: "🏆 Level 5: Kalimat Kode Warna",
-        words: ["ibu baca buku", "saya suka makan", "kucing makan ikan", "budi main bola"]
-      },
-      {
-        id: 5,
-        name: "🧩 Level 6: Susun Kata Acak",
-        words: ["budi minum susu", "adik main boneka", "kakak beli baju", "burung terbang tinggi", "ayah baca koran"]
-      }
+      { id: 0, name: "🌱 Level 1: Kata 2-3 Huruf", words: ["ibu", "apa", "ada", "ani", "api", "uap"] },
+      { id: 1, name: "🔤 Level 2: Kata 4 Huruf", words: ["baca", "buku", "bola", "kaki", "mata", "sapu"] },
+      { id: 2, name: "⭐ Level 3: Kata 5 Huruf", words: ["makan", "minum", "gajah", "rumah", "pohon", "hujan"] },
+      { id: 3, name: "🚀 Level 4: Kata 6 Huruf", words: ["sepeda", "sekolah", "sepatu", "celana", "burung", "kucing"] },
+      { id: 4, name: "🏆 Level 5: Kalimat Kode Warna", words: ["ibu baca buku", "saya suka makan", "kucing makan ikan", "budi main bola"] },
+      { id: 5, name: "🧩 Level 6: Susun Kata Acak", words: ["budi minum susu", "adik main boneka", "kakak beli baju", "burung terbang tinggi", "ayah baca koran"] }
     ];
 
     // Game State
@@ -488,7 +489,7 @@
     let currentWord = "";
     let currentColorMap = {};
 
-    // Element DOM
+    // DOM Elements
     const pages = {
       landing: document.getElementById('landing-page'),
       level: document.getElementById('level-page'),
@@ -497,6 +498,7 @@
 
     const playerNameInput = document.getElementById('player-name-input');
     const startBtn = document.getElementById('start-btn');
+    const resetProgressBtn = document.getElementById('reset-progress-btn');
     const welcomeUserEl = document.getElementById('welcome-user');
     const levelGridEl = document.getElementById('level-grid');
     const backToLevelsBtn = document.getElementById('back-to-levels');
@@ -514,10 +516,44 @@
     const levelBadgeEl = document.getElementById('level-badge');
     const keyboardEl = document.getElementById('keyboard');
 
+    // === FITUR SAVE & LOAD PROGRESS ===
+    function saveProgress() {
+      const data = {
+        playerName: playerName,
+        unlockedLevel: unlockedLevel
+      };
+      localStorage.setItem('gameKodeWarnaProgress', JSON.stringify(data));
+    }
+
+    function loadProgress() {
+      const savedData = localStorage.getItem('gameKodeWarnaProgress');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        playerName = data.playerName || "";
+        unlockedLevel = data.unlockedLevel || 0;
+
+        if (playerName) {
+          playerNameInput.value = playerName;
+          startBtn.textContent = "Lanjutkan Bermain ▶️";
+          resetProgressBtn.style.display = "inline-block";
+        }
+      }
+    }
+
+    resetProgressBtn.addEventListener('click', () => {
+      playSound('wrong');
+      if (confirm("Yakin ingin menghapus progress dan mengulang dari awal?")) {
+        localStorage.removeItem('gameKodeWarnaProgress');
+        playerName = "";
+        unlockedLevel = 0;
+        playerNameInput.value = "";
+        startBtn.textContent = "Mulai Bermain 🚀";
+        resetProgressBtn.style.display = "none";
+      }
+    });
+
     function showPage(pageName) {
-      Object.keys(pages).forEach(p => {
-        pages[p].classList.remove('active');
-      });
+      Object.keys(pages).forEach(p => pages[p].classList.remove('active'));
       pages[pageName].classList.add('active');
     }
 
@@ -534,6 +570,7 @@
       initAudio();
       playSound('click');
       playerName = playerNameInput.value.trim() || "Anak Hebat";
+      saveProgress(); // Simpan nama pemain
       welcomeUserEl.textContent = `Halo ${playerName}, pilih level kamu ya!`;
       renderLevelSelect();
       showPage('level');
@@ -559,9 +596,7 @@
             startLevel();
           };
         } else {
-          card.onclick = () => {
-            playSound('wrong');
-          };
+          card.onclick = () => playSound('wrong');
         }
         levelGridEl.appendChild(card);
       });
@@ -587,14 +622,12 @@
       answerInputEl.value = '';
       feedbackEl.textContent = '';
 
-      // Tampilan khusus Level 6 (Tanpa Kode Warna)
       if (currentLevelIndex === 5) {
         keySectionContainer.style.display = 'none';
         colorCodeDisplayEl.style.display = 'none';
         equalsSignEl.style.display = 'none';
         level6HintEl.style.display = 'block';
 
-        // Render Tombol Kata Acak
         const wordsList = shuffleArray(currentWord.split(' '));
         keyboardEl.innerHTML = '';
         wordsList.forEach(w => {
@@ -603,17 +636,12 @@
           btn.textContent = w;
           btn.onclick = () => {
             playSound('click');
-            if (answerInputEl.value.length > 0) {
-              answerInputEl.value += ' ' + w;
-            } else {
-              answerInputEl.value += w;
-            }
+            answerInputEl.value += (answerInputEl.value.length > 0 ? ' ' : '') + w;
           };
           keyboardEl.appendChild(btn);
         });
 
       } else {
-        // Level 1-5 (Menggunakan Kode Warna)
         keySectionContainer.style.display = 'block';
         colorCodeDisplayEl.style.display = 'flex';
         equalsSignEl.style.display = 'inline';
@@ -626,7 +654,6 @@
           currentColorMap[char] = shuffledColors[idx % shuffledColors.length];
         });
 
-        // Kunci Warna
         const shuffledKeyChars = shuffleArray(uniqueChars);
         keyBoardEl.innerHTML = '';
         shuffledKeyChars.forEach(char => {
@@ -639,7 +666,6 @@
           keyBoardEl.appendChild(item);
         });
 
-        // Soal Warna
         colorCodeDisplayEl.innerHTML = '';
         for (let char of currentWord) {
           if (char === ' ') {
@@ -654,7 +680,6 @@
           }
         }
 
-        // Render Keyboard Level 1-5
         if (currentLevelIndex === 4) {
           const wordsList = shuffleArray(currentWord.split(' '));
           keyboardEl.innerHTML = '';
@@ -664,11 +689,7 @@
             btn.textContent = w;
             btn.onclick = () => {
               playSound('click');
-              if (answerInputEl.value.length > 0) {
-                answerInputEl.value += ' ' + w;
-              } else {
-                answerInputEl.value += w;
-              }
+              answerInputEl.value += (answerInputEl.value.length > 0 ? ' ' : '') + w;
             };
             keyboardEl.appendChild(btn);
           });
@@ -688,7 +709,6 @@
         }
       }
 
-      // Tombol Hapus (Berlaku untuk semua level)
       const delBtn = document.createElement('button');
       delBtn.className = 'key-btn del';
       delBtn.textContent = '⌫ Hapus';
@@ -705,7 +725,6 @@
       keyboardEl.appendChild(delBtn);
     }
 
-    // Cek Jawaban
     checkBtn.addEventListener('click', () => {
       const userAnswer = answerInputEl.value.toLowerCase().trim();
 
@@ -724,6 +743,7 @@
             if (currentLevelIndex + 1 < levels.length) {
               if (unlockedLevel < currentLevelIndex + 1) {
                 unlockedLevel = currentLevelIndex + 1;
+                saveProgress(); // Otomatis simpan saat membuka level baru
                 playSound('unlock');
               }
               alert(`Hore ${playerName}! Kamu menyelesaikan level ini! 🌟`);
@@ -742,6 +762,9 @@
         feedbackEl.style.color = "#dc2626";
       }
     });
+
+    // Inisialisasi progress saat pertama kali dimuat
+    loadProgress();
   </script>
 </body>
 </html>
