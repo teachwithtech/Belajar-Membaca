@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html_content = """<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -27,6 +27,7 @@
       text-align: center;
       max-width: 500px;
       width: 100%;
+      position: relative;
     }
 
     h1 {
@@ -43,13 +44,15 @@
       margin-bottom: 20px;
     }
 
-    /* Landing Page Style */
-    #landing-page {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* Section Control */
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
     }
 
+    /* 1. Landing Page Style */
     .landing-icon {
       font-size: 3.5rem;
       margin-bottom: 10px;
@@ -66,16 +69,73 @@
       outline: none;
     }
 
-    /* Game Page Style */
-    #game-page {
-      display: none;
+    /* 2. Level Select Page Style */
+    .level-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .level-card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .level-card.unlocked {
+      border-color: #4A90E2;
+      background-color: #f0f7ff;
+    }
+
+    .level-card.unlocked:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+    }
+
+    .level-card.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: #edf2f7;
+    }
+
+    .level-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #2d3748;
+    }
+
+    .level-status {
+      font-size: 1.2rem;
+    }
+
+    /* 3. Game Play Page Style */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     .greeting {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       color: #4A90E2;
-      margin-bottom: 10px;
     }
 
     .level-badge {
@@ -85,25 +145,24 @@
       padding: 6px 16px;
       border-radius: 20px;
       font-weight: bold;
-      font-size: 0.9rem;
-      margin-bottom: 20px;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
     }
 
     .key-section {
       background-color: #fafafa;
-      border: 2px dashed #e0e0e0;
+      border: 2px dashed #cbd5e1;
       border-radius: 16px;
       padding: 15px 10px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .key-title {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 10px;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .key-board {
@@ -120,22 +179,18 @@
     }
 
     .circle {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15);
-      transition: transform 0.2s;
+      border: 2px solid rgba(0,0,0,0.15);
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
     }
 
     .key-item span {
       margin-top: 4px;
       font-weight: bold;
       font-size: 1.1rem;
-      color: #333;
-    }
-
-    .question-section {
-      margin-bottom: 20px;
+      color: #1e293b;
     }
 
     .color-row {
@@ -143,15 +198,15 @@
       justify-content: center;
       gap: 10px;
       margin-bottom: 15px;
-      min-height: 45px;
+      min-height: 48px;
       align-items: center;
     }
 
     .equals {
       font-size: 2rem;
       font-weight: bold;
-      color: #555;
-      margin: 0 10px;
+      color: #64748b;
+      margin: 0 8px;
     }
 
     .answer-box {
@@ -178,7 +233,6 @@
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 4px 0 #04b383;
-      transition: all 0.1s;
     }
 
     .action-btn:active {
@@ -188,12 +242,11 @@
 
     #feedback {
       min-height: 28px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
-      margin-top: 15px;
+      margin-top: 12px;
     }
 
-    /* On-Screen Keyboard */
     .keyboard-container {
       display: flex;
       flex-wrap: wrap;
@@ -201,19 +254,19 @@
       gap: 8px;
       margin-top: 15px;
       padding-top: 15px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid #f1f5f9;
     }
 
     .key-btn {
-      background: #e9ecef;
-      border: none;
-      border-radius: 8px;
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
       padding: 10px 16px;
       font-size: 1.2rem;
       font-weight: bold;
-      color: #333;
+      color: #1e293b;
       cursor: pointer;
-      box-shadow: 0 3px 0 #ced4da;
+      box-shadow: 0 3px 0 #94a3b8;
     }
 
     .key-btn:active {
@@ -223,8 +276,9 @@
 
     .key-btn.del {
       background-color: #ff85a1;
+      border-color: #e65c7b;
       color: white;
-      box-shadow: 0 3px 0 #e65c7b;
+      box-shadow: 0 3px 0 #c9405f;
     }
   </style>
 </head>
@@ -233,19 +287,34 @@
   <div class="game-container">
     
     <!-- 1. LANDING PAGE -->
-    <div id="landing-page">
+    <div id="landing-page" class="page active">
       <div class="landing-icon">🎨📚</div>
       <h1>Game Kode Warna</h1>
       <p class="subtitle">Belajar Membaca Sambil Bermain Warna</p>
       
       <input type="text" id="player-name-input" class="input-name-box" placeholder="Ketik Nama Anak..." autocomplete="off">
+      <br>
       <button id="start-btn" class="action-btn">Mulai Bermain 🚀</button>
     </div>
 
-    <!-- 2. GAME PAGE -->
-    <div id="game-page">
-      <div id="greeting-msg" class="greeting">Halo!</div>
-      <div id="level-badge" class="level-badge">Level 1 - Kata 2-3 Huruf</div>
+    <!-- 2. LEVEL SELECT PAGE -->
+    <div id="level-page" class="page">
+      <h2 style="margin-top:0;">Pilih Level</h2>
+      <p id="welcome-user" class="subtitle">Halo Anak Hebat!</p>
+      
+      <div id="level-grid" class="level-grid">
+        <!-- Level cards rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- 3. GAME PLAY PAGE -->
+    <div id="game-page" class="page">
+      <div class="top-bar">
+        <button id="back-to-levels" class="back-btn">⬅ Level</button>
+        <span id="greeting-msg" class="greeting">Halo!</span>
+      </div>
+
+      <div id="level-badge" class="level-badge">Level 1</div>
 
       <!-- Kunci Kode Warna -->
       <div class="key-section">
@@ -256,7 +325,7 @@
       <!-- Soal -->
       <div class="question-section">
         <div id="color-code-display" class="color-row"></div>
-        <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
           <span class="equals">=</span>
           <input type="text" id="answer-input" class="answer-box" placeholder="..." readonly>
         </div>
@@ -265,7 +334,7 @@
         </div>
       </div>
 
-      <!-- Keyboard Layar (Huruf Diacak) -->
+      <!-- Keyboard Layar -->
       <div id="keyboard" class="keyboard-container"></div>
 
       <!-- Feedback Hasil -->
@@ -275,48 +344,120 @@
   </div>
 
   <script>
-    // Palette Warna Kontras Tinggi
-    const colorPalette = [
-      '#FFD166', // Kuning
-      '#06D6A0', // Hijau
-      '#118AB2', // Biru
-      '#F8961E', // Oranye
-      '#F72585', // Pink
-      '#7209B7', // Ungu
-      '#EF476F', // Merah Muda
-      '#073B4C', // Biru Gelap
-      '#9B5DE5', // Ungu Cerah
-      '#11B5E4', // Cyan
-      '#FF006E'  // Rose
+    // System Web Audio API untuk Efek Suara
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+    }
+
+    function playSound(type) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now); // A3
+        osc.frequency.setValueAtTime(164.81, now + 0.15); // E3
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'unlock') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.setValueAtTime(554.37, now + 0.1);
+        osc.frequency.setValueAtTime(659.25, now + 0.2);
+        osc.frequency.setValueAtTime(880, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      }
+    }
+
+    // Palette Warna Kontras Tinggi Teruji
+    const distinctColors = [
+      '#FF0000', // Merah Terang
+      '#0033FF', // Biru Tua
+      '#00CC44', // Hijau Cerah
+      '#FFD700', // Kuning Emas
+      '#FF00FF', // Magenta/Pink
+      '#00FFFF', // Cyan/Biru Muda
+      '#FF6600', // Oranye Pekat
+      '#7000FF', // Ungu
+      '#8B4513'  // Cokelat
     ];
 
-    // Daftar Soal Bertahap
+    // Level Data
     const levels = [
       {
-        name: "Level 1: Kata Pendek (2-3 Huruf)",
+        id: 0,
+        name: "Level 1: Kata 2-3 Huruf",
         words: ["ibu", "apa", "ada", "ani", "api", "uap"]
       },
       {
+        id: 1,
         name: "Level 2: Kata 4 Huruf Sederhana",
         words: ["baca", "buku", "bola", "kaki", "mata", "sapu", "cuci"]
       },
       {
-        name: "Level 3: Kombinasi Lebih Bervariasi",
+        id: 2,
+        name: "Level 3: Kombinasi Kata 4 Huruf",
         words: ["peta", "rusa", "satu", "topi", "kura", "roda"]
+      },
+      {
+        name: "Level 4: Kata 5 Huruf Mantap",
+        id: 3,
+        words: ["makan", "minum", "gajah", "rumah", "pohon", "hujan"]
       }
     ];
 
+    // Game State
     let playerName = "";
+    let unlockedLevel = 0; // Level tertinggi yang terbuka
     let currentLevelIndex = 0;
     let currentWordIndex = 0;
     let currentWord = "";
     let currentColorMap = {};
 
     // Element DOM
-    const landingPage = document.getElementById('landing-page');
-    const gamePage = document.getElementById('game-page');
+    const pages = {
+      landing: document.getElementById('landing-page'),
+      level: document.getElementById('level-page'),
+      game: document.getElementById('game-page')
+    };
+
     const playerNameInput = document.getElementById('player-name-input');
     const startBtn = document.getElementById('start-btn');
+    const welcomeUserEl = document.getElementById('welcome-user');
+    const levelGridEl = document.getElementById('level-grid');
+    const backToLevelsBtn = document.getElementById('back-to-levels');
     const greetingMsg = document.getElementById('greeting-msg');
     
     const keyBoardEl = document.getElementById('color-key');
@@ -327,7 +468,13 @@
     const levelBadgeEl = document.getElementById('level-badge');
     const keyboardEl = document.getElementById('keyboard');
 
-    // Helper: Pengacak Array (Fisher-Yates Shuffle)
+    function showPage(pageName) {
+      Object.keys(pages).forEach(p => {
+        pages[p].classList.remove('active');
+      });
+      pages[pageName].classList.add('active');
+    }
+
     function shuffleArray(array) {
       const arr = [...array];
       for (let i = arr.length - 1; i > 0; i--) {
@@ -337,37 +484,75 @@
       return arr;
     }
 
-    // Tombol Mulai (Landing Page -> Game Page)
+    // Event: Start Game
     startBtn.addEventListener('click', () => {
+      initAudio();
+      playSound('click');
       playerName = playerNameInput.value.trim() || "Anak Hebat";
-      greetingMsg.textContent = `Halo, ${playerName}! Selamat Belajar! 🌟`;
-      
-      landingPage.style.display = 'none';
-      gamePage.style.display = 'block';
-      
-      loadWord();
+      welcomeUserEl.textContent = `Halo ${playerName}, pilih level kamu ya!`;
+      renderLevelSelect();
+      showPage('level');
     });
+
+    // Render Halaman Pilih Level
+    function renderLevelSelect() {
+      levelGridEl.innerHTML = '';
+      levels.forEach((lvl, idx) => {
+        const card = document.createElement('div');
+        const isUnlocked = idx <= unlockedLevel;
+        
+        card.className = `level-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+        card.innerHTML = `
+          <div class="level-title">${lvl.name}</div>
+          <div class="level-status">${isUnlocked ? '🔓' : '🔒'}</div>
+        `;
+
+        if (isUnlocked) {
+          card.onclick = () => {
+            playSound('click');
+            currentLevelIndex = idx;
+            currentWordIndex = 0;
+            startLevel();
+          };
+        } else {
+          card.onclick = () => {
+            playSound('wrong');
+          };
+        }
+        levelGridEl.appendChild(card);
+      });
+    }
+
+    backToLevelsBtn.addEventListener('click', () => {
+      playSound('click');
+      renderLevelSelect();
+      showPage('level');
+    });
+
+    function startLevel() {
+      greetingMsg.textContent = `Pemain: ${playerName}`;
+      showPage('game');
+      loadWord();
+    }
 
     function loadWord() {
       const levelData = levels[currentLevelIndex];
-      levelBadgeEl.textContent = levelData.name;
+      levelBadgeEl.textContent = `${levelData.name} (${currentWordIndex + 1}/${levelData.words.length})`;
       currentWord = levelData.words[currentWordIndex];
 
-      // Reset Input & Feedback
       answerInputEl.value = '';
       feedbackEl.textContent = '';
 
-      // Dapatkan semua huruf unik dari kata saat ini
       const uniqueChars = Array.from(new Set(currentWord.split('')));
       
-      // 1. ACAK PEMETAAN WARNA untuk huruf di soal ini
-      const shuffledColors = shuffleArray(colorPalette);
+      // 1. Pilih warna kontras tinggi yang berbeda untuk tiap huruf
+      const shuffledColors = shuffleArray(distinctColors);
       currentColorMap = {};
-      uniqueChars.forEach((char, index) => {
-        currentColorMap[char] = shuffledColors[index % shuffledColors.length];
+      uniqueChars.forEach((char, idx) => {
+        currentColorMap[char] = shuffledColors[idx % shuffledColors.length];
       });
 
-      // 2. ACAK URUTAN KUNCI WARNA di tampilan atas agar tidak berurutan mengikuti kata
+      // 2. Tampilkan kunci warna diacak
       const shuffledKeyChars = shuffleArray(uniqueChars);
       keyBoardEl.innerHTML = '';
       shuffledKeyChars.forEach(char => {
@@ -380,7 +565,7 @@
         keyBoardEl.appendChild(item);
       });
 
-      // 3. Tampilkan Kode Lingkaran Warna Soal (Sesuai urutan huruf kata asli)
+      // 3. Tampilkan Soal Kode Warna
       colorCodeDisplayEl.innerHTML = '';
       for (let char of currentWord) {
         const circle = document.createElement('div');
@@ -389,7 +574,7 @@
         colorCodeDisplayEl.appendChild(circle);
       }
 
-      // 4. ACAK TOMBOL KEYBOARD LAYAR agar posisi tombol tidak menebak urutan
+      // 4. Keyboard Layar
       const shuffledKeyboardChars = shuffleArray(uniqueChars);
       keyboardEl.innerHTML = '';
       shuffledKeyboardChars.forEach(char => {
@@ -397,6 +582,7 @@
         btn.className = 'key-btn';
         btn.textContent = char;
         btn.onclick = () => {
+          playSound('click');
           answerInputEl.value += char;
         };
         keyboardEl.appendChild(btn);
@@ -407,29 +593,47 @@
       delBtn.className = 'key-btn del';
       delBtn.textContent = '⌫ Hapus';
       delBtn.onclick = () => {
+        playSound('click');
         answerInputEl.value = answerInputEl.value.slice(0, -1);
       };
       keyboardEl.appendChild(delBtn);
     }
 
-    // Pengecekan Jawaban
+    // Cek Jawaban
     checkBtn.addEventListener('click', () => {
       const userAnswer = answerInputEl.value.toLowerCase().trim();
 
       if (userAnswer === currentWord) {
+        playSound('correct');
         feedbackEl.textContent = `Hebat ${playerName}! Jawaban Benar! 🎉`;
         feedbackEl.style.color = "#06d6a0";
 
         setTimeout(() => {
           currentWordIndex++;
-          if (currentWordIndex >= levels[currentLevelIndex].words.length) {
+          const currentLevelData = levels[currentLevelIndex];
+
+          // Jika selesai semua kata di level ini
+          if (currentWordIndex >= currentLevelData.words.length) {
             currentWordIndex = 0;
-            currentLevelIndex = (currentLevelIndex + 1) % levels.length;
-            alert(`Hore ${playerName}! Kamu Lanjut ke Tingkat Berikutnya! 🌟`);
+            
+            // Buka level berikutnya jika ada
+            if (currentLevelIndex + 1 < levels.length) {
+              if (unlockedLevel < currentLevelIndex + 1) {
+                unlockedLevel = currentLevelIndex + 1;
+                playSound('unlock');
+              }
+              alert(`Hore ${playerName}! Kamu menyelesaikan ${currentLevelData.name}! Level berikutnya telah terbuka! 🌟`);
+            } else {
+              alert(`Luar biasa ${playerName}! Kamu telah menamatkan SEMUA level! 🏆`);
+            }
+            renderLevelSelect();
+            showPage('level');
+          } else {
+            loadWord();
           }
-          loadWord();
-        }, 1200);
+        }, 1000);
       } else {
+        playSound('wrong');
         feedbackEl.textContent = "Coba lagi ya! 😊";
         feedbackEl.style.color = "#ef476f";
       }
@@ -437,3 +641,9 @@
   </script>
 </body>
 </html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("File index.html berhasil diperbarui!")
