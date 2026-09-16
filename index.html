@@ -31,16 +31,58 @@
 
     h1 {
       color: #333;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-top: 0;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    /* Landing Page Style */
+    #landing-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .landing-icon {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+    }
+
+    .input-name-box {
+      font-size: 1.2rem;
+      width: 80%;
+      text-align: center;
+      border: 3px solid #4A90E2;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    /* Game Page Style */
+    #game-page {
+      display: none;
+    }
+
+    .greeting {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #4A90E2;
+      margin-bottom: 10px;
     }
 
     .level-badge {
       display: inline-block;
-      background-color: #4A90E2;
-      color: white;
-      padding: 5px 15px;
+      background-color: #ffb703;
+      color: #333;
+      padding: 6px 16px;
       border-radius: 20px;
       font-weight: bold;
       font-size: 0.9rem;
@@ -93,7 +135,7 @@
     }
 
     .question-section {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .color-row {
@@ -114,7 +156,7 @@
 
     .answer-box {
       font-size: 1.6rem;
-      width: 140px;
+      width: 150px;
       text-align: center;
       border: 3px solid #4A90E2;
       border-radius: 12px;
@@ -123,16 +165,12 @@
       letter-spacing: 2px;
       text-transform: lowercase;
       outline: none;
-    }
-
-    .answer-box:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      background-color: #f8fafc;
     }
 
     .action-btn {
       font-size: 1.1rem;
-      padding: 10px 24px;
+      padding: 12px 28px;
       background-color: #06d6a0;
       color: white;
       border: none;
@@ -155,12 +193,12 @@
       margin-top: 15px;
     }
 
-    /* On-Screen Keyboard untuk Kemudahan Anak */
+    /* On-Screen Keyboard */
     .keyboard-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid #eee;
@@ -170,8 +208,8 @@
       background: #e9ecef;
       border: none;
       border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 1.1rem;
+      padding: 10px 16px;
+      font-size: 1.2rem;
       font-weight: bold;
       color: #333;
       cursor: pointer;
@@ -193,54 +231,64 @@
 <body>
 
   <div class="game-container">
-    <h1>Game Kode Warna 🎨</h1>
-    <div id="level-badge" class="level-badge">Level 1 - Kata 2-3 Huruf</div>
-
-    <!-- Kunci Kode Warna -->
-    <div class="key-section">
-      <div class="key-title">Kunci Huruf Warna</div>
-      <div id="color-key" class="key-board"></div>
+    
+    <!-- 1. LANDING PAGE -->
+    <div id="landing-page">
+      <div class="landing-icon">🎨📚</div>
+      <h1>Game Kode Warna</h1>
+      <p class="subtitle">Belajar Membaca Sambil Bermain Warna</p>
+      
+      <input type="text" id="player-name-input" class="input-name-box" placeholder="Ketik Nama Anak..." autocomplete="off">
+      <button id="start-btn" class="action-btn">Mulai Bermain 🚀</button>
     </div>
 
-    <!-- Soal -->
-    <div class="question-section">
-      <div id="color-code-display" class="color-row"></div>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <span class="equals">=</span>
-        <input type="text" id="answer-input" class="answer-box" placeholder="..." readonly>
+    <!-- 2. GAME PAGE -->
+    <div id="game-page">
+      <div id="greeting-msg" class="greeting">Halo!</div>
+      <div id="level-badge" class="level-badge">Level 1 - Kata 2-3 Huruf</div>
+
+      <!-- Kunci Kode Warna -->
+      <div class="key-section">
+        <div class="key-title">Kunci Huruf Warna</div>
+        <div id="color-key" class="key-board"></div>
       </div>
-      <div style="margin-top: 15px;">
-        <button id="check-btn" class="action-btn">Cek Jawaban</button>
+
+      <!-- Soal -->
+      <div class="question-section">
+        <div id="color-code-display" class="color-row"></div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+          <span class="equals">=</span>
+          <input type="text" id="answer-input" class="answer-box" placeholder="..." readonly>
+        </div>
+        <div style="margin-top: 15px;">
+          <button id="check-btn" class="action-btn">Cek Jawaban</button>
+        </div>
       </div>
+
+      <!-- Keyboard Layar (Huruf Diacak) -->
+      <div id="keyboard" class="keyboard-container"></div>
+
+      <!-- Feedback Hasil -->
+      <div id="feedback"></div>
     </div>
 
-    <!-- Papan Tombol Huruf Layar (Ramah Anak) -->
-    <div id="keyboard" class="keyboard-container"></div>
-
-    <!-- Feedback / Pesan Hasil -->
-    <div id="feedback"></div>
   </div>
 
   <script>
-    // Data Pemetaan Warna ke Huruf
-    const colorMap = {
-      'a': '#FFD166', // Kuning
-      'i': '#06D6A0', // Hijau
-      'u': '#118AB2', // Biru
-      'e': '#4EA8DE', // Biru Muda
-      'o': '#F8961E', // Oranye
-      'b': '#F72585', // Pink
-      'c': '#7209B7', // Ungu
-      'd': '#EF476F', // Merah Muda Cerah
-      'k': '#073B4C', // Biru Gelap
-      'l': '#9B5DE5', // Ungu Cerah
-      'm': '#11B5E4', // Cyan
-      'n': '#F15BB5', // Magenta
-      'p': '#00F5D4', // Toska
-      'r': '#FF006E', // Rose
-      's': '#8338EC', // Violet
-      't': '#FB5607'  // Oranye Merah
-    };
+    // Palette Warna Kontras Tinggi
+    const colorPalette = [
+      '#FFD166', // Kuning
+      '#06D6A0', // Hijau
+      '#118AB2', // Biru
+      '#F8961E', // Oranye
+      '#F72585', // Pink
+      '#7209B7', // Ungu
+      '#EF476F', // Merah Muda
+      '#073B4C', // Biru Gelap
+      '#9B5DE5', // Ungu Cerah
+      '#11B5E4', // Cyan
+      '#FF006E'  // Rose
+    ];
 
     // Daftar Soal Bertahap
     const levels = [
@@ -258,10 +306,19 @@
       }
     ];
 
+    let playerName = "";
     let currentLevelIndex = 0;
     let currentWordIndex = 0;
     let currentWord = "";
+    let currentColorMap = {};
 
+    // Element DOM
+    const landingPage = document.getElementById('landing-page');
+    const gamePage = document.getElementById('game-page');
+    const playerNameInput = document.getElementById('player-name-input');
+    const startBtn = document.getElementById('start-btn');
+    const greetingMsg = document.getElementById('greeting-msg');
+    
     const keyBoardEl = document.getElementById('color-key');
     const colorCodeDisplayEl = document.getElementById('color-code-display');
     const answerInputEl = document.getElementById('answer-input');
@@ -270,9 +327,26 @@
     const levelBadgeEl = document.getElementById('level-badge');
     const keyboardEl = document.getElementById('keyboard');
 
-    function initGame() {
-      loadWord();
+    // Helper: Pengacak Array (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
     }
+
+    // Tombol Mulai (Landing Page -> Game Page)
+    startBtn.addEventListener('click', () => {
+      playerName = playerNameInput.value.trim() || "Anak Hebat";
+      greetingMsg.textContent = `Halo, ${playerName}! Selamat Belajar! 🌟`;
+      
+      landingPage.style.display = 'none';
+      gamePage.style.display = 'block';
+      
+      loadWord();
+    });
 
     function loadWord() {
       const levelData = levels[currentLevelIndex];
@@ -283,35 +357,42 @@
       answerInputEl.value = '';
       feedbackEl.textContent = '';
 
-      // 1. Dapatkan semua huruf unik dari kata saat ini
+      // Dapatkan semua huruf unik dari kata saat ini
       const uniqueChars = Array.from(new Set(currentWord.split('')));
       
-      // Tampilkan Kunci Kode Warna
-      keyBoardEl.innerHTML = '';
-      uniqueChars.forEach(char => {
-        if (colorMap[char]) {
-          const item = document.createElement('div');
-          item.className = 'key-item';
-          item.innerHTML = `
-            <div class="circle" style="background-color: ${colorMap[char]}"></div>
-            <span>${char}</span>
-          `;
-          keyBoardEl.appendChild(item);
-        }
+      // 1. ACAK PEMETAAN WARNA untuk huruf di soal ini
+      const shuffledColors = shuffleArray(colorPalette);
+      currentColorMap = {};
+      uniqueChars.forEach((char, index) => {
+        currentColorMap[char] = shuffledColors[index % shuffledColors.length];
       });
 
-      // 2. Tampilkan Kode Lingkaran Warna Soal
+      // 2. ACAK URUTAN KUNCI WARNA di tampilan atas agar tidak berurutan mengikuti kata
+      const shuffledKeyChars = shuffleArray(uniqueChars);
+      keyBoardEl.innerHTML = '';
+      shuffledKeyChars.forEach(char => {
+        const item = document.createElement('div');
+        item.className = 'key-item';
+        item.innerHTML = `
+          <div class="circle" style="background-color: ${currentColorMap[char]}"></div>
+          <span>${char}</span>
+        `;
+        keyBoardEl.appendChild(item);
+      });
+
+      // 3. Tampilkan Kode Lingkaran Warna Soal (Sesuai urutan huruf kata asli)
       colorCodeDisplayEl.innerHTML = '';
       for (let char of currentWord) {
         const circle = document.createElement('div');
         circle.className = 'circle';
-        circle.style.backgroundColor = colorMap[char] || '#ccc';
+        circle.style.backgroundColor = currentColorMap[char] || '#ccc';
         colorCodeDisplayEl.appendChild(circle);
       }
 
-      // 3. Buat Tombol Keyboard Layar dari huruf yang ada di kunci
+      // 4. ACAK TOMBOL KEYBOARD LAYAR agar posisi tombol tidak menebak urutan
+      const shuffledKeyboardChars = shuffleArray(uniqueChars);
       keyboardEl.innerHTML = '';
-      uniqueChars.forEach(char => {
+      shuffledKeyboardChars.forEach(char => {
         const btn = document.createElement('button');
         btn.className = 'key-btn';
         btn.textContent = char;
@@ -336,7 +417,7 @@
       const userAnswer = answerInputEl.value.toLowerCase().trim();
 
       if (userAnswer === currentWord) {
-        feedbackEl.textContent = "Hebat! Jawaban Benar! 🎉";
+        feedbackEl.textContent = `Hebat ${playerName}! Jawaban Benar! 🎉`;
         feedbackEl.style.color = "#06d6a0";
 
         setTimeout(() => {
@@ -344,7 +425,7 @@
           if (currentWordIndex >= levels[currentLevelIndex].words.length) {
             currentWordIndex = 0;
             currentLevelIndex = (currentLevelIndex + 1) % levels.length;
-            alert("Hore! Lanjut ke tingkat berikutnya! 🌟");
+            alert(`Hore ${playerName}! Kamu Lanjut ke Tingkat Berikutnya! 🌟`);
           }
           loadWord();
         }, 1200);
@@ -353,8 +434,6 @@
         feedbackEl.style.color = "#ef476f";
       }
     });
-
-    initGame();
   </script>
 </body>
 </html>
