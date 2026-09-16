@@ -1,16 +1,25 @@
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game Kode Warna - Belajar Membaca</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
+      user-select: none;
     }
+
     body {
-      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', sans-serif;
-      background-color: #f4f6f9;
+      font-family: 'Fredoka', cursive, sans-serif;
+      /* Background Pastel Lembut dengan Pola Bintang Lucu */
+      background-color: #e0f2fe;
+      background-image: 
+        radial-gradient(#fde047 10%, transparent 11%),
+        radial-gradient(#a7f3d0 10%, transparent 11%);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,29 +28,35 @@ html_content = """<!DOCTYPE html>
       padding: 15px;
     }
 
+    /* Kontainer Pop-up Utama dengan Efek Semi Transparan (Glassmorphism) */
     .game-container {
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 4px solid rgba(255, 255, 255, 0.9);
       padding: 25px 20px;
-      border-radius: 24px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
       text-align: center;
-      max-width: 500px;
+      max-width: 480px;
       width: 100%;
       position: relative;
     }
 
     h1 {
-      color: #333;
-      font-size: 1.6rem;
-      margin-top: 0;
-      margin-bottom: 8px;
+      color: #38bdf8;
+      font-size: 1.8rem;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 0px #bae6fd;
     }
 
     p.subtitle {
-      color: #666;
+      color: #64748b;
       font-size: 0.95rem;
       margin-top: 0;
       margin-bottom: 20px;
+      font-weight: 600;
     }
 
     /* Section Control */
@@ -50,23 +65,35 @@ html_content = """<!DOCTYPE html>
     }
     .page.active {
       display: block;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     /* 1. Landing Page Style */
     .landing-icon {
-      font-size: 3.5rem;
+      font-size: 4rem;
       margin-bottom: 10px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
 
     .input-name-box {
       font-size: 1.2rem;
-      width: 80%;
+      width: 85%;
       text-align: center;
-      border: 3px solid #4A90E2;
-      border-radius: 12px;
-      padding: 10px;
+      border: 3px solid #38bdf8;
+      border-radius: 20px;
+      padding: 12px;
       margin-bottom: 20px;
       outline: none;
+      font-family: inherit;
+      font-weight: bold;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     }
 
     /* 2. Level Select Page Style */
@@ -74,45 +101,47 @@ html_content = """<!DOCTYPE html>
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-top: 20px;
+      margin-top: 15px;
     }
 
+    /* Kartu Level Semi-Transparan */
     .level-card {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 15px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 3px solid #cbd5e1;
+      border-radius: 20px;
+      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
     .level-card.unlocked {
-      border-color: #4A90E2;
-      background-color: #f0f7ff;
+      border-color: #38bdf8;
+      background: rgba(240, 249, 255, 0.85);
+      box-shadow: 0 4px 0 #bae6fd;
     }
 
     .level-card.unlocked:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+      background: rgba(224, 242, 254, 0.95);
     }
 
     .level-card.locked {
       opacity: 0.6;
       cursor: not-allowed;
-      background-color: #edf2f7;
+      background: rgba(241, 245, 249, 0.6);
     }
 
     .level-title {
-      font-weight: bold;
-      font-size: 1.05rem;
-      color: #2d3748;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #1e293b;
     }
 
     .level-status {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
     }
 
     /* 3. Game Play Page Style */
@@ -124,52 +153,54 @@ html_content = """<!DOCTYPE html>
     }
 
     .back-btn {
-      background: #e2e8f0;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
+      background: rgba(225, 229, 235, 0.8);
+      border: 2px solid #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 14px;
       font-weight: bold;
       cursor: pointer;
+      font-family: inherit;
     }
 
     .greeting {
       font-size: 1rem;
-      font-weight: bold;
-      color: #4A90E2;
+      font-weight: 700;
+      color: #0284c7;
     }
 
     .level-badge {
       display: inline-block;
-      background-color: #ffb703;
-      color: #333;
-      padding: 6px 16px;
+      background: #fde047;
+      color: #713f12;
+      padding: 6px 18px;
       border-radius: 20px;
-      font-weight: bold;
-      font-size: 0.85rem;
+      font-weight: 700;
+      font-size: 0.9rem;
       margin-bottom: 15px;
+      box-shadow: 0 3px 0 #facc15;
     }
 
     .key-section {
-      background-color: #fafafa;
-      border: 2px dashed #cbd5e1;
-      border-radius: 16px;
-      padding: 15px 10px;
-      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 2px dashed #93c5fd;
+      border-radius: 20px;
+      padding: 12px 10px;
+      margin-bottom: 15px;
     }
 
     .key-title {
       font-size: 0.8rem;
-      color: #64748b;
-      margin-bottom: 10px;
-      font-weight: bold;
-      text-transform: uppercase;
+      color: #0284c7;
+      margin-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
     .key-board {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .key-item {
@@ -182,13 +213,13 @@ html_content = """<!DOCTYPE html>
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      border: 2px solid rgba(0,0,0,0.15);
-      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
+      border: 3px solid rgba(255,255,255,0.8);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 -4px 0 rgba(0,0,0,0.15);
     }
 
     .key-item span {
       margin-top: 4px;
-      font-weight: bold;
+      font-weight: 700;
       font-size: 1.1rem;
       color: #1e293b;
     }
@@ -204,46 +235,50 @@ html_content = """<!DOCTYPE html>
 
     .equals {
       font-size: 2rem;
-      font-weight: bold;
-      color: #64748b;
-      margin: 0 8px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin: 0 4px;
     }
 
     .answer-box {
       font-size: 1.6rem;
       width: 150px;
       text-align: center;
-      border: 3px solid #4A90E2;
-      border-radius: 12px;
+      border: 3px solid #38bdf8;
+      border-radius: 16px;
       padding: 8px;
-      font-weight: bold;
+      font-weight: 700;
       letter-spacing: 2px;
       text-transform: lowercase;
       outline: none;
-      background-color: #f8fafc;
+      background: rgba(255, 255, 255, 0.9);
+      font-family: inherit;
     }
 
+    /* Tombol Pop-up Semi Transparan */
     .action-btn {
       font-size: 1.1rem;
       padding: 12px 28px;
-      background-color: #06d6a0;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: bold;
+      background: rgba(74, 222, 128, 0.9);
+      color: #064e3b;
+      border: 3px solid #86efac;
+      border-radius: 18px;
+      font-weight: 700;
+      font-family: inherit;
       cursor: pointer;
-      box-shadow: 0 4px 0 #04b383;
+      box-shadow: 0 5px 0 #22c55e;
+      transition: all 0.1s;
     }
 
     .action-btn:active {
       transform: translateY(4px);
-      box-shadow: 0 0 0 #04b383;
+      box-shadow: 0 1px 0 #22c55e;
     }
 
     #feedback {
       min-height: 28px;
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1.2rem;
+      font-weight: 700;
       margin-top: 12px;
     }
 
@@ -253,32 +288,33 @@ html_content = """<!DOCTYPE html>
       justify-content: center;
       gap: 8px;
       margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #f1f5f9;
+      padding-top: 12px;
+      border-top: 2px solid rgba(226, 232, 240, 0.6);
     }
 
     .key-btn {
-      background: #f1f5f9;
+      background: rgba(255, 255, 255, 0.85);
       border: 2px solid #cbd5e1;
-      border-radius: 10px;
+      border-radius: 14px;
       padding: 10px 16px;
       font-size: 1.2rem;
-      font-weight: bold;
+      font-weight: 700;
       color: #1e293b;
+      font-family: inherit;
       cursor: pointer;
-      box-shadow: 0 3px 0 #94a3b8;
+      box-shadow: 0 4px 0 #94a3b8;
     }
 
     .key-btn:active {
       transform: translateY(3px);
-      box-shadow: none;
+      box-shadow: 0 1px 0 #94a3b8;
     }
 
     .key-btn.del {
-      background-color: #ff85a1;
-      border-color: #e65c7b;
+      background: rgba(244, 63, 94, 0.85);
+      border-color: #fca5a5;
       color: white;
-      box-shadow: 0 3px 0 #c9405f;
+      box-shadow: 0 4px 0 #e11d48;
     }
   </style>
 </head>
@@ -288,18 +324,18 @@ html_content = """<!DOCTYPE html>
     
     <!-- 1. LANDING PAGE -->
     <div id="landing-page" class="page active">
-      <div class="landing-icon">🎨📚</div>
-      <h1>Game Kode Warna</h1>
+      <div class="landing-icon">🎨🎈</div>
+      <h1>Kode Warna Kata</h1>
       <p class="subtitle">Belajar Membaca Sambil Bermain Warna</p>
       
-      <input type="text" id="player-name-input" class="input-name-box" placeholder="Ketik Nama Anak..." autocomplete="off">
+      <input type="text" id="player-name-input" class="input-name-box" placeholder="Ketik Namamu..." autocomplete="off">
       <br>
       <button id="start-btn" class="action-btn">Mulai Bermain 🚀</button>
     </div>
 
     <!-- 2. LEVEL SELECT PAGE -->
     <div id="level-page" class="page">
-      <h2 style="margin-top:0;">Pilih Level</h2>
+      <h2 style="margin-top:0; color: #0284c7;">Pilih Level</h2>
       <p id="welcome-user" class="subtitle">Halo Anak Hebat!</p>
       
       <div id="level-grid" class="level-grid">
@@ -310,7 +346,7 @@ html_content = """<!DOCTYPE html>
     <!-- 3. GAME PLAY PAGE -->
     <div id="game-page" class="page">
       <div class="top-bar">
-        <button id="back-to-levels" class="back-btn">⬅ Level</button>
+        <button id="back-to-levels" class="back-btn">⬅ Menu</button>
         <span id="greeting-msg" class="greeting">Halo!</span>
       </div>
 
@@ -318,7 +354,7 @@ html_content = """<!DOCTYPE html>
 
       <!-- Kunci Kode Warna -->
       <div class="key-section">
-        <div class="key-title">Kunci Huruf Warna</div>
+        <div class="key-title">KUNCI HURUF WARNA</div>
         <div id="color-key" class="key-board"></div>
       </div>
 
@@ -330,7 +366,7 @@ html_content = """<!DOCTYPE html>
           <input type="text" id="answer-input" class="answer-box" placeholder="..." readonly>
         </div>
         <div style="margin-top: 15px;">
-          <button id="check-btn" class="action-btn">Cek Jawaban</button>
+          <button id="check-btn" class="action-btn">Cek Jawaban ✨</button>
         </div>
       </div>
 
@@ -373,17 +409,17 @@ html_content = """<!DOCTYPE html>
         osc.stop(now + 0.05);
       } else if (type === 'correct') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
-        osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
         gain.gain.setValueAtTime(0.3, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
         osc.start(now);
         osc.stop(now + 0.4);
       } else if (type === 'wrong') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, now); // A3
-        osc.frequency.setValueAtTime(164.81, now + 0.15); // E3
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.setValueAtTime(164.81, now + 0.15);
         gain.gain.setValueAtTime(0.25, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
         osc.start(now);
@@ -401,46 +437,44 @@ html_content = """<!DOCTYPE html>
       }
     }
 
-    // Palette Warna Kontras Tinggi Teruji
+    // Palette Warna Kontras Tinggi
     const distinctColors = [
-      '#FF0000', // Merah Terang
-      '#0033FF', // Biru Tua
-      '#00CC44', // Hijau Cerah
-      '#FFD700', // Kuning Emas
-      '#FF00FF', // Magenta/Pink
-      '#00FFFF', // Cyan/Biru Muda
-      '#FF6600', // Oranye Pekat
-      '#7000FF', // Ungu
-      '#8B4513'  // Cokelat
+      '#ef476f', // Merah Pink
+      '#118ab2', // Biru
+      '#06d6a0', // Hijau
+      '#ffd166', // Kuning Emas
+      '#f78c6b', // Oranye
+      '#8338ec', // Ungu
+      '#3a86ff'  // Cyan/Biru Cerah
     ];
 
     // Level Data
     const levels = [
       {
         id: 0,
-        name: "Level 1: Kata 2-3 Huruf",
+        name: "🌱 Level 1: Kata 2-3 Huruf",
         words: ["ibu", "apa", "ada", "ani", "api", "uap"]
       },
       {
         id: 1,
-        name: "Level 2: Kata 4 Huruf Sederhana",
+        name: "🔤 Level 2: Kata 4 Huruf",
         words: ["baca", "buku", "bola", "kaki", "mata", "sapu", "cuci"]
       },
       {
         id: 2,
-        name: "Level 3: Kombinasi Kata 4 Huruf",
+        name: "🧩 Level 3: Kombinasi Kata",
         words: ["peta", "rusa", "satu", "topi", "kura", "roda"]
       },
       {
-        name: "Level 4: Kata 5 Huruf Mantap",
         id: 3,
+        name: "🐱 Level 4: Kata 5 Huruf",
         words: ["makan", "minum", "gajah", "rumah", "pohon", "hujan"]
       }
     ];
 
     // Game State
     let playerName = "";
-    let unlockedLevel = 0; // Level tertinggi yang terbuka
+    let unlockedLevel = 0;
     let currentLevelIndex = 0;
     let currentWordIndex = 0;
     let currentWord = "";
@@ -530,7 +564,7 @@ html_content = """<!DOCTYPE html>
     });
 
     function startLevel() {
-      greetingMsg.textContent = `Pemain: ${playerName}`;
+      greetingMsg.textContent = `${playerName}`;
       showPage('game');
       loadWord();
     }
@@ -545,14 +579,13 @@ html_content = """<!DOCTYPE html>
 
       const uniqueChars = Array.from(new Set(currentWord.split('')));
       
-      // 1. Pilih warna kontras tinggi yang berbeda untuk tiap huruf
       const shuffledColors = shuffleArray(distinctColors);
       currentColorMap = {};
       uniqueChars.forEach((char, idx) => {
         currentColorMap[char] = shuffledColors[idx % shuffledColors.length];
       });
 
-      // 2. Tampilkan kunci warna diacak
+      // Tampilkan Kunci Warna
       const shuffledKeyChars = shuffleArray(uniqueChars);
       keyBoardEl.innerHTML = '';
       shuffledKeyChars.forEach(char => {
@@ -560,12 +593,12 @@ html_content = """<!DOCTYPE html>
         item.className = 'key-item';
         item.innerHTML = `
           <div class="circle" style="background-color: ${currentColorMap[char]}"></div>
-          <span>${char}</span>
+          <span>${char.toUpperCase()}</span>
         `;
         keyBoardEl.appendChild(item);
       });
 
-      // 3. Tampilkan Soal Kode Warna
+      // Tampilkan Soal
       colorCodeDisplayEl.innerHTML = '';
       for (let char of currentWord) {
         const circle = document.createElement('div');
@@ -574,13 +607,13 @@ html_content = """<!DOCTYPE html>
         colorCodeDisplayEl.appendChild(circle);
       }
 
-      // 4. Keyboard Layar
+      // Keyboard Layar
       const shuffledKeyboardChars = shuffleArray(uniqueChars);
       keyboardEl.innerHTML = '';
       shuffledKeyboardChars.forEach(char => {
         const btn = document.createElement('button');
         btn.className = 'key-btn';
-        btn.textContent = char;
+        btn.textContent = char.toUpperCase();
         btn.onclick = () => {
           playSound('click');
           answerInputEl.value += char;
@@ -605,26 +638,24 @@ html_content = """<!DOCTYPE html>
 
       if (userAnswer === currentWord) {
         playSound('correct');
-        feedbackEl.textContent = `Hebat ${playerName}! Jawaban Benar! 🎉`;
-        feedbackEl.style.color = "#06d6a0";
+        feedbackEl.textContent = `🎉 HEBAT ${playerName.toUpperCase()}! BENAR!`;
+        feedbackEl.style.color = "#059669";
 
         setTimeout(() => {
           currentWordIndex++;
           const currentLevelData = levels[currentLevelIndex];
 
-          // Jika selesai semua kata di level ini
           if (currentWordIndex >= currentLevelData.words.length) {
             currentWordIndex = 0;
             
-            // Buka level berikutnya jika ada
             if (currentLevelIndex + 1 < levels.length) {
               if (unlockedLevel < currentLevelIndex + 1) {
                 unlockedLevel = currentLevelIndex + 1;
                 playSound('unlock');
               }
-              alert(`Hore ${playerName}! Kamu menyelesaikan ${currentLevelData.name}! Level berikutnya telah terbuka! 🌟`);
+              alert(`Hore ${playerName}! Kamu menyelesaikan level ini! 🌟`);
             } else {
-              alert(`Luar biasa ${playerName}! Kamu telah menamatkan SEMUA level! 🏆`);
+              alert(`Luar biasa ${playerName}! Kamu menamatkan SEMUA level! 🏆`);
             }
             renderLevelSelect();
             showPage('level');
@@ -634,14 +665,10 @@ html_content = """<!DOCTYPE html>
         }, 1000);
       } else {
         playSound('wrong');
-        feedbackEl.textContent = "Coba lagi ya! 😊";
-        feedbackEl.style.color = "#ef476f";
+        feedbackEl.textContent = "💡 Coba lagi ya!";
+        feedbackEl.style.color = "#dc2626";
       }
     });
   </script>
 </body>
 </html>
-"""
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html_content)
