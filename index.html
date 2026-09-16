@@ -235,15 +235,15 @@
     }
 
     .answer-box {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       width: 100%;
-      max-width: 260px;
+      max-width: 320px;
       text-align: center;
       border: 3px solid #38bdf8;
       border-radius: 16px;
-      padding: 8px;
+      padding: 10px;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       text-transform: lowercase;
       outline: none;
       background: rgba(255, 255, 255, 0.9);
@@ -280,7 +280,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       margin-top: 15px;
       padding-top: 12px;
       border-top: 2px solid rgba(226, 232, 240, 0.6);
@@ -290,7 +290,7 @@
       background: rgba(255, 255, 255, 0.85);
       border: 2px solid #cbd5e1;
       border-radius: 12px;
-      padding: 8px 14px;
+      padding: 10px 16px;
       font-size: 1.1rem;
       font-weight: 700;
       color: #1e293b;
@@ -311,12 +311,12 @@
       box-shadow: 0 4px 0 #e11d48;
     }
 
-    .key-btn.space {
-      background: rgba(56, 189, 248, 0.85);
-      border-color: #bae6fd;
-      color: white;
-      box-shadow: 0 4px 0 #0284c7;
-      padding: 8px 20px;
+    /* Style Khusus Level 6 (Susun Kata Acak) */
+    .word-scramble-hint {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0284c7;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -354,17 +354,18 @@
 
       <div id="level-badge" class="level-badge">Level 1</div>
 
-      <!-- Kunci Kode Warna -->
-      <div class="key-section">
+      <!-- Kunci Kode Warna (Sembunyi di Level 6) -->
+      <div id="key-section-container" class="key-section">
         <div class="key-title">KUNCI HURUF WARNA</div>
         <div id="color-key" class="key-board"></div>
       </div>
 
       <!-- Soal -->
       <div class="question-section">
+        <div id="level6-hint-msg" class="word-scramble-hint" style="display: none;">🧩 Susunlah kata-kata berikut:</div>
         <div id="color-code-display" class="color-row"></div>
         <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
-          <span class="equals">=</span>
+          <span id="equals-sign" class="equals">=</span>
           <input type="text" id="answer-input" class="answer-box" placeholder="..." readonly>
         </div>
         <div style="margin-top: 15px;">
@@ -465,12 +466,17 @@
       {
         id: 3,
         name: "🚀 Level 4: Kata 6 Huruf",
-        words: ["sepedai", "sekolah", "sepatu", "celana", "burung", "kucing"]
+        words: ["sepeda", "sekolah", "sepatu", "celana", "burung", "kucing"]
       },
       {
         id: 4,
-        name: "🏆 Level 5: Kalimat 3 Kata",
+        name: "🏆 Level 5: Kalimat Kode Warna",
         words: ["ibu baca buku", "saya suka makan", "kucing makan ikan", "budi main bola"]
+      },
+      {
+        id: 5,
+        name: "🧩 Level 6: Susun Kata Acak",
+        words: ["budi minum susu", "adik main boneka", "kakak beli baju", "burung terbang tinggi", "ayah baca koran"]
       }
     ];
 
@@ -496,8 +502,12 @@
     const backToLevelsBtn = document.getElementById('back-to-levels');
     const greetingMsg = document.getElementById('greeting-msg');
     
+    const keySectionContainer = document.getElementById('key-section-container');
     const keyBoardEl = document.getElementById('color-key');
     const colorCodeDisplayEl = document.getElementById('color-code-display');
+    const equalsSignEl = document.getElementById('equals-sign');
+    const level6HintEl = document.getElementById('level6-hint-msg');
+    
     const answerInputEl = document.getElementById('answer-input');
     const checkBtn = document.getElementById('check-btn');
     const feedbackEl = document.getElementById('feedback');
@@ -577,46 +587,14 @@
       answerInputEl.value = '';
       feedbackEl.textContent = '';
 
-      // Ekstrak karakter unik tanpa spasi
-      const uniqueChars = Array.from(new Set(currentWord.replace(/\s+/g, '').split('')));
-      
-      const shuffledColors = shuffleArray(distinctColors);
-      currentColorMap = {};
-      uniqueChars.forEach((char, idx) => {
-        currentColorMap[char] = shuffledColors[idx % shuffledColors.length];
-      });
+      // Tampilan khusus Level 6 (Tanpa Kode Warna)
+      if (currentLevelIndex === 5) {
+        keySectionContainer.style.display = 'none';
+        colorCodeDisplayEl.style.display = 'none';
+        equalsSignEl.style.display = 'none';
+        level6HintEl.style.display = 'block';
 
-      // Tampilkan Kunci Warna
-      const shuffledKeyChars = shuffleArray(uniqueChars);
-      keyBoardEl.innerHTML = '';
-      shuffledKeyChars.forEach(char => {
-        const item = document.createElement('div');
-        item.className = 'key-item';
-        item.innerHTML = `
-          <div class="circle" style="background-color: ${currentColorMap[char]}"></div>
-          <span>${char.toUpperCase()}</span>
-        `;
-        keyBoardEl.appendChild(item);
-      });
-
-      // Tampilkan Soal Warna (Spasi diwakili dengan pemisah transparan)
-      colorCodeDisplayEl.innerHTML = '';
-      for (let char of currentWord) {
-        if (char === ' ') {
-          const spaceEl = document.createElement('div');
-          spaceEl.style.width = '20px';
-          colorCodeDisplayEl.appendChild(spaceEl);
-        } else {
-          const circle = document.createElement('div');
-          circle.className = 'circle';
-          circle.style.backgroundColor = currentColorMap[char] || '#ccc';
-          colorCodeDisplayEl.appendChild(circle);
-        }
-      }
-
-      // Render Keyboard
-      if (currentLevelIndex === 4) {
-        // Level 5: Tombol berupa kata acak
+        // Render Tombol Kata Acak
         const wordsList = shuffleArray(currentWord.split(' '));
         keyboardEl.innerHTML = '';
         wordsList.forEach(w => {
@@ -633,30 +611,90 @@
           };
           keyboardEl.appendChild(btn);
         });
+
       } else {
-        // Level 1-4: Tombol huruf
-        const shuffledKeyboardChars = shuffleArray(uniqueChars);
-        keyboardEl.innerHTML = '';
-        shuffledKeyboardChars.forEach(char => {
-          const btn = document.createElement('button');
-          btn.className = 'key-btn';
-          btn.textContent = char.toUpperCase();
-          btn.onclick = () => {
-            playSound('click');
-            answerInputEl.value += char;
-          };
-          keyboardEl.appendChild(btn);
+        // Level 1-5 (Menggunakan Kode Warna)
+        keySectionContainer.style.display = 'block';
+        colorCodeDisplayEl.style.display = 'flex';
+        equalsSignEl.style.display = 'inline';
+        level6HintEl.style.display = 'none';
+
+        const uniqueChars = Array.from(new Set(currentWord.replace(/\s+/g, '').split('')));
+        const shuffledColors = shuffleArray(distinctColors);
+        currentColorMap = {};
+        uniqueChars.forEach((char, idx) => {
+          currentColorMap[char] = shuffledColors[idx % shuffledColors.length];
         });
+
+        // Kunci Warna
+        const shuffledKeyChars = shuffleArray(uniqueChars);
+        keyBoardEl.innerHTML = '';
+        shuffledKeyChars.forEach(char => {
+          const item = document.createElement('div');
+          item.className = 'key-item';
+          item.innerHTML = `
+            <div class="circle" style="background-color: ${currentColorMap[char]}"></div>
+            <span>${char.toUpperCase()}</span>
+          `;
+          keyBoardEl.appendChild(item);
+        });
+
+        // Soal Warna
+        colorCodeDisplayEl.innerHTML = '';
+        for (let char of currentWord) {
+          if (char === ' ') {
+            const spaceEl = document.createElement('div');
+            spaceEl.style.width = '18px';
+            colorCodeDisplayEl.appendChild(spaceEl);
+          } else {
+            const circle = document.createElement('div');
+            circle.className = 'circle';
+            circle.style.backgroundColor = currentColorMap[char] || '#ccc';
+            colorCodeDisplayEl.appendChild(circle);
+          }
+        }
+
+        // Render Keyboard Level 1-5
+        if (currentLevelIndex === 4) {
+          const wordsList = shuffleArray(currentWord.split(' '));
+          keyboardEl.innerHTML = '';
+          wordsList.forEach(w => {
+            const btn = document.createElement('button');
+            btn.className = 'key-btn';
+            btn.textContent = w;
+            btn.onclick = () => {
+              playSound('click');
+              if (answerInputEl.value.length > 0) {
+                answerInputEl.value += ' ' + w;
+              } else {
+                answerInputEl.value += w;
+              }
+            };
+            keyboardEl.appendChild(btn);
+          });
+        } else {
+          const shuffledKeyboardChars = shuffleArray(uniqueChars);
+          keyboardEl.innerHTML = '';
+          shuffledKeyboardChars.forEach(char => {
+            const btn = document.createElement('button');
+            btn.className = 'key-btn';
+            btn.textContent = char.toUpperCase();
+            btn.onclick = () => {
+              playSound('click');
+              answerInputEl.value += char;
+            };
+            keyboardEl.appendChild(btn);
+          });
+        }
       }
 
-      // Tombol Hapus
+      // Tombol Hapus (Berlaku untuk semua level)
       const delBtn = document.createElement('button');
       delBtn.className = 'key-btn del';
       delBtn.textContent = '⌫ Hapus';
       delBtn.onclick = () => {
         playSound('click');
-        if (currentLevelIndex === 4) {
-          // Hapus kata terakhir pada level 5
+        if (currentLevelIndex >= 4) {
           let wordsArr = answerInputEl.value.trim().split(' ');
           wordsArr.pop();
           answerInputEl.value = wordsArr.join(' ');
